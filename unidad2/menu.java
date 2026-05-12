@@ -144,6 +144,163 @@ public void menus(){
             switch (opcioness) {
                 case 0: 
                     System.out.println("tipo de servicio");
+                    System.out.println("presionar del 0 al 8 para ingresar a cada opcion");
+                    System.out.println("0 = mantenimiento preventivo");
+                    System.out.println("1 = reparaciones mecanicas");
+                    System.out.println("2=servicios electricos y electronicos");
+                    System.out.println("3= servicios de carroceria y pintura");
+                    System.out.println("4= servicios de neumaticos ");
+                    System.out.println("5= servicios de diagnostico y asesoria");
+                    System.out.println("6= servicios especializados");
+                    System.out.println("7= servicios adicionales");
+                    int opcionservicio= sc.nextInt();
+                    switch (opcionservicio) {
+                        case 0:
+                            System.out.println("mantenimiento preventivo");
+                            System.out.println("presionar del 0 al 6 para ingresar a cada opcion");
+                            System.out.println("0= cambio de aceite y fitro ");
+                            System.out.println("1= revision y ajustes de frenos");
+                            System.out.println("2= alienacion y balanceo de ruedas");
+                            System.out.println("3= rotacion de neumaticos");
+                            System.out.println("4= revision de niveles"); // liquido refrigerante, direccion hidraulica, limpiaparabrisas
+                            System.out.println("5= cambio de bujias ");
+                            System.out.println("6= revision de sistema electrico");// bateria, alterador, cables
+                            int opcionmantenimientopreventivo= sc.nextInt();
+                            switch (opcionmantenimientopreventivo) {
+                                case 0:
+                                    System.out.println("al coche se le realiza elcambio de aceite y filtro");
+                                    break;
+                                case 1:
+                                    System.out.println("al coche se realiza la revision y ajustes de frenos");
+                                    break;
+                                case 2:
+                                    System.out.println("al coche se realiza la alienacion y balanceo de ruedas");
+                                    break;
+                                case 3:
+                                    System.out.println("al coche se realiza la rotacion de neumaticos");
+                                    break;
+                                case 4:
+                                    System.out.println("al coche se realiza la revision de niveles");
+                                    break;
+                                case 5:
+                                    System.out.println("al coche se realiza el cambio de bujias");
+                                    break;
+                                case 6:
+                                    System.out.println("al coche se realiza la revision de sistema electrico");
+                                    break;
+                            }
+                            break;
+                        case 1:
+                            System.out.println("reparaciones mecanicas");
+                            System.out.println("presionar del 0 al 5 para ingresar a cada opcion");
+                            System.out.println("0 = sistema de frenos");//reparacon de bombas, calipers, cilindros)
+                            System.out.println("1 = sistema de suspension y direccion");
+                            System.out.println("2 = sistema de escape");
+                            System.out.println("3 = sistema de refrigeracion ");
+                            System.out.println("4 = motor ");
+                            System.out.println("5 = caja de cambios");
+                            int opcionreparacionmecanica= sc.nextInt();
+                            switch (opcionreparacionmecanica) {
+                                case 0:
+                                    System.out.println("al coche se realiza la reparacion del sistema de frenos");
+                                    break;
+                                case 1:
+                                    System.out.println("al coche se realiza la reparacion del sistema de suspension y direccion");
+                                    break;
+                                case 2:
+                                    System.out.println("al coche se realiza la reparacion del sistema de escape");
+                                    break;
+                                case 3:
+                                    System.out.println("al coche se realiza la reparacion del sistema de refrigeracion");
+                                    break;
+                                case 4:
+                                    System.out.println("al coche se realiza la reparacion del motor");
+                                    break;
+                                case 5:
+                                    System.out.println("al coche se realiza la reparacion de la caja de cambios");
+                                    break;
+                                default:
+                                    System.out.println("opcion no valida");
+                                    break;
+                            } 
+                            break;
+                        case 2:
+                            System.out.println("servicios electricos y electronicos");
+                            System.out.println("ingresar del 0 al 5 para ingresar a cada opcion");
+                            System.out.println("0= reparacion del sistema de luces");
+                            System.out.println("1= reparacion de altenador y motor de arranque");
+                            System.out.println("2= revision y cambio de fusibles reles y sensores");
+                            System.out.println("3= reparacion de sistemas de iluminacion");
+                            System.out.println("4= electricidad del tablero"); 
+                            System.out.println("5= reparacion de sistema de climatizacion");
+                            int opcionservicioelectrico= sc.nextInt();
+                            switch (opcionservicioelectrico) {
+                                case 0:
+                                    System.out.println("al coche se realiza la reparacion del sistema de luces");
+                                    break;
+                                case 1:
+                                    System.out.println("al coche se realiza la reparacion de altenador y motor de arranque");
+                                    break;
+                                case 2:
+                                    System.out.println("al coche se realiza la revision y cambio de fusibles reles y sensores");
+                                    break;
+                                case 3:
+                                    System.out.println("al coche se realiza la reparacion de sistemas de iluminacion");
+                                    break;
+                                case 4:
+                                    System.out.println("al coche se realiza la electricidad del tablero");
+                                    break;
+                                case 5:
+                                    System.out.println("al coche se realiza la reparacion de sistema de climatizacion");
+                                    break;
+                                default:
+                                    System.out.println("opcion no valida");
+                                    break;
+                            }
+
+                            break;
+                        case 3:
+                            System.out.println("servicios de carroceria y pintura");
+                            System.out.println("ingresar del 0 al 3 para ingresar a cada opcion");
+                            System.out.println("0 = reparacion de abolladuras y rayones");
+                            System.out.println("1 = retoque de pintura ");
+                            System.out.println("2 = cambio de parachoques, espejos y vidrios");
+                            System.out.println("3 = reparacion de chasis(enderezar)");
+                            int opcioncarroceria= sc.nextInt();
+                            switch (opcioncarroceria){
+                                case 0:
+                                    System.out.println("al coche se le realiza la reparacion de abolladuras y rayones");
+                                    break;
+                                case 1:
+                                    System.out.println("al coche se le realiza el retoque de pintura");
+                                    break;
+                                case 2:
+                                    System.out.println("al coche se le realiza el cambio de parachoques, espejos y vidrios");
+                                    break;
+                                case 3:
+                                    System.out.println("al coche se le realiza la reparacion de chasis(enderezar)");
+                                    break;
+                                default:
+                                    System.out.println("opcion no valida");
+                                    break;
+                            }
+                            break;
+                        case 4:
+                            System.out.println("servicios de neumaticos ");
+                            break;
+                        case 5:
+                            System.out.println("servicios de diagnostico y asesoria");
+                            break;
+                        case 6:
+                            System.out.println("servicios especializados");
+                            break;
+                        case 7:
+                            System.out.println("servicios adicionales");
+                            break;
+                        default:
+                            System.out.println("opcion no valida");
+                            break;
+                    }
                     break;
                 case 1:
                     System.out.println("precio de cada servicio");

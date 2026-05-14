@@ -1,28 +1,24 @@
-import java.util.Scanner;
-public class login {
-     Scanner sc = new Scanner(System.in);
-    String Usuario="admin";
-    String contrasena= "admin123";     
-    public void compararusuario(){
-        String USUARIO;
-        String CONTRASENA;
-        System.out.println("Ingresar usuario");
-        USUARIO=sc.nextLine();
-        System.out.println("Ingresar contrasena");
-        CONTRASENA=sc.nextLine();
-        if(Usuario.equals(USUARIO) && contrasena.equals(CONTRASENA)){
-            System.out.println("Bienvenido"); 
-        }else{
-            System.out.println("Usuario o contrasena incorrecta");
+import java.util.List;
+
+public class Login {
+    private final List<Usuario> usuarios;
+
+    public Login(List<Usuario> usuarios) {
+        this.usuarios = usuarios;
+    }
+
+    public boolean autenticar(LectorConsola lector) {
+        String usuario = lector.leerTexto("Ingresar usuario");
+        String contrasena = lector.leerTexto("Ingresar contrasena");
+
+        for(Usuario usuarioRegistrado : usuarios) {
+            if(usuarioRegistrado.validarCredenciales(usuario, contrasena)) {
+                System.out.println("Bienvenido");
+                return true;
+            }
         }
-}
-public static void main(String[] args) {
-    login loginadmin= new login();
-    login gerente= new login();
-    System.out.println("-----ADMINISTRADOR-----");
-    loginadmin.compararusuario();
-    
 
+        System.out.println("Usuario o contrasena incorrecta");
+        return false;
+    }
 }
-}
-

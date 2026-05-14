@@ -1,58 +1,68 @@
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.List;
 
-public class menu {
-    Scanner sc = new Scanner(System.in);
-    ArrayList<Usuarios> listaUsuarios = new ArrayList<>();
-    ArrayList<Vehiculo> listaVehiculo = new ArrayList<>();
+public class Menu {
+    private final LectorConsola lector;
+    private final List<Usuario> usuarios;
+    private final List<Vehiculo> vehiculos;
+    private final Seguridad seguridad;
+    private final Configuracion configuracion;
+    private final Transacciones transacciones;
+    private final Consultas consultas;
+    private final Reportes reportes;
 
-    seguridad moduloSeguridad = new seguridad();
-    configuracion moduloConfiguracion = new configuracion();
-    transacciones moduloTransacciones = new transacciones();
-    consultas moduloConsultas = new consultas();
-    reportes moduloReportes = new reportes();
+    public Menu(LectorConsola lector, List<Usuario> usuarios, List<Vehiculo> vehiculos) {
+        this.lector = lector;
+        this.usuarios = usuarios;
+        this.vehiculos = vehiculos;
+        this.seguridad = new Seguridad(lector, usuarios);
+        this.configuracion = new Configuracion(lector);
+        this.transacciones = new Transacciones(lector, vehiculos);
+        this.consultas = new Consultas(lector, vehiculos);
+        this.reportes = new Reportes(lector, vehiculos);
+    }
 
-    public void menus() {
+    public void mostrar() {
         int opcion;
 
         do {
-            System.out.println("ingresar una opcion del 0 al 5");
-            System.out.println("0 = seguridad");
-            System.out.println("1 = configuracion");
-            System.out.println("2 = transacciones");
-            System.out.println("3 = consultas");
-            System.out.println("4 = reportes");
-            System.out.println("5 = salir");
-            opcion = sc.nextInt();
-
-            switch(opcion) {
-                case 0:
-                    moduloSeguridad.mostrar(sc, listaUsuarios);
-                    break;
-                case 1:
-                    moduloConfiguracion.mostrar(sc);
-                    break;
-                case 2:
-                    moduloTransacciones.mostrar(sc, listaVehiculo);
-                    break;
-                case 3:
-                    moduloConsultas.mostrar(sc, listaVehiculo);
-                    break;
-                case 4:
-                    moduloReportes.mostrar(sc, listaVehiculo);
-                    break;
-                case 5:
-                    System.out.println("salir");
-                    break;
-                default:
-                    System.out.println("opcion no valida");
-                    break;
-            }
+            mostrarOpciones();
+            opcion = lector.leerEntero("Ingresar una opcion del 0 al 5");
+            ejecutarOpcion(opcion);
         } while(opcion != 5);
     }
 
-    public static void main(String[] args) {
-        menu menu1 = new menu();
-        menu1.menus();
+    private void mostrarOpciones() {
+        System.out.println("0 = seguridad");
+        System.out.println("1 = configuracion");
+        System.out.println("2 = transacciones");
+        System.out.println("3 = consultas");
+        System.out.println("4 = reportes");
+        System.out.println("5 = salir");
+    }
+
+    private void ejecutarOpcion(int opcion) {
+        switch(opcion) {
+            case 0:
+                seguridad.mostrar();
+                break;
+            case 1:
+                configuracion.mostrar();
+                break;
+            case 2:
+                transacciones.mostrar();
+                break;
+            case 3:
+                consultas.mostrar();
+                break;
+            case 4:
+                reportes.mostrar();
+                break;
+            case 5:
+                System.out.println("salir");
+                break;
+            default:
+                System.out.println("opcion no valida");
+                break;
+        }
     }
 }

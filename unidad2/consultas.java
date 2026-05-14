@@ -1,26 +1,33 @@
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.List;
 
-public class consultas {
-    public void mostrar(Scanner sc, ArrayList<Vehiculo> listaVehiculo) {
+public class Consultas {
+    private final LectorConsola lector;
+    private final List<Vehiculo> vehiculos;
+
+    public Consultas(LectorConsola lector, List<Vehiculo> vehiculos) {
+        this.lector = lector;
+        this.vehiculos = vehiculos;
+    }
+
+    public void mostrar() {
         System.out.println("consultas");
-        System.out.println("presionar del 0 al 4 para ingresar a cada opcion");
         System.out.println("0 = buscar vehiculo por placa");
         System.out.println("1 = ver vehiculos en espera");
         System.out.println("2 = ver historial de reparaciones de un vehiculo");
         System.out.println("3 = ver mecanicos disponibles");
         System.out.println("4 = consultar servicios mas solicitados");
-        int opcion = sc.nextInt();
+
+        int opcion = lector.leerEntero("Presionar del 0 al 4 para ingresar a cada opcion");
 
         switch(opcion) {
             case 0:
-                buscarVehiculoPorPlaca(sc, listaVehiculo);
+                buscarVehiculoPorPlaca();
                 break;
             case 1:
-                verVehiculosEnEspera(listaVehiculo);
+                verVehiculosEnEspera();
                 break;
             case 2:
-                verHistorial(sc, listaVehiculo);
+                verHistorial();
                 break;
             case 3:
                 verMecanicosDisponibles();
@@ -34,67 +41,78 @@ public class consultas {
         }
     }
 
-    private void buscarVehiculoPorPlaca(Scanner sc, ArrayList<Vehiculo> listaVehiculo) {
+    private void buscarVehiculoPorPlaca() {
         System.out.println("buscar vehiculo por placa");
 
-        if(listaVehiculo.isEmpty()) {
+        if(vehiculos.isEmpty()) {
             System.out.println("no hay vehiculos registrados");
             return;
         }
 
-        sc.nextLine();
-        System.out.println("ingresar la placa del vehiculo");
-        String placaBuscar = sc.nextLine();
-        boolean encontrado = false;
+        String placaBuscada = lector.leerTexto("ingresar la placa del vehiculo");
+        Vehiculo vehiculo = buscarPorPlaca(placaBuscada);
 
-        for(int i = 0; i < listaVehiculo.size(); i++) {
-            if(listaVehiculo.get(i).placa.equalsIgnoreCase(placaBuscar)) {
-                System.out.println("vehiculo encontrado:");
-                listaVehiculo.get(i).mostrarVehiculo();
-                encontrado = true;
-            }
-        }
-
-        if(!encontrado) {
+        if(vehiculo == null) {
             System.out.println("no se encontro un vehiculo con esa placa");
+            return;
         }
+
+        System.out.println("vehiculo encontrado:");
+        vehiculo.mostrar();
     }
 
-    private void verVehiculosEnEspera(ArrayList<Vehiculo> listaVehiculo) {
+    private void verVehiculosEnEspera() {
         System.out.println("ver vehiculos en espera");
 
-        if(listaVehiculo.isEmpty()) {
+        if(vehiculos.isEmpty()) {
             System.out.println("no hay vehiculos en espera");
-        } else {
-            for(int i = 0; i < listaVehiculo.size(); i++) {
+            return;
+        }
+
+        boolean hayVehiculosEnEspera = false;
+
+        for(int i = 0; i < vehiculos.size(); i++) {
+            if(vehiculos.get(i).estaPendiente()) {
                 System.out.println("vehiculo " + (i + 1));
-                listaVehiculo.get(i).mostrarVehiculo();
+                vehiculos.get(i).mostrar();
+                hayVehiculosEnEspera = true;
             }
+        }
+
+        if(!hayVehiculosEnEspera) {
+            System.out.println("no hay vehiculos en espera");
         }
     }
 
-    private void verHistorial(Scanner sc, ArrayList<Vehiculo> listaVehiculo) {
+    private void verHistorial() {
         System.out.println("ver historial de reparaciones de un vehiculo");
 
-        if(listaVehiculo.isEmpty()) {
+        if(vehiculos.isEmpty()) {
             System.out.println("no hay vehiculos registrados");
             return;
         }
 
-        sc.nextLine();
-        System.out.println("ingresar la placa del vehiculo");
-        String placaBuscar = sc.nextLine();
+        String placaBuscada = lector.leerTexto("ingresar la placa del vehiculo");
+        Vehiculo vehiculo = buscarPorPlaca(placaBuscada);
 
-        for(int i = 0; i < listaVehiculo.size(); i++) {
-            if(listaVehiculo.get(i).placa.equalsIgnoreCase(placaBuscar)) {
-                System.out.println("historial del vehiculo:");
-                listaVehiculo.get(i).mostrarVehiculo();
-                System.out.println("por ahora no hay reparaciones registradas");
-                return;
+        if(vehiculo == null) {
+            System.out.println("no se encontro un vehiculo con esa placa");
+            return;
+        }
+
+        System.out.println("historial del vehiculo:");
+        vehiculo.mostrar();
+        vehiculo.mostrarHistorial();
+    }
+
+    private Vehiculo buscarPorPlaca(String placaBuscada) {
+        for(Vehiculo vehiculo : vehiculos) {
+            if(vehiculo.getPlaca().equalsIgnoreCase(placaBuscada)) {
+                return vehiculo;
             }
         }
 
-        System.out.println("no se encontro un vehiculo con esa placa");
+        return null;
     }
 
     private void verMecanicosDisponibles() {

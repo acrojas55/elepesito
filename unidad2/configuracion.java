@@ -1,31 +1,35 @@
-import java.util.Scanner;
+public class Configuracion {
+    private final LectorConsola lector;
 
-public class configuracion {
-    public void mostrar(Scanner sc) {
+    public Configuracion(LectorConsola lector) {
+        this.lector = lector;
+    }
+
+    public void mostrar() {
         System.out.println("configuracion");
-        System.out.println("presionar del 0 al 4 para las opciones");
         System.out.println("0 = tipo de servicio");
         System.out.println("1 = precio de cada servicio");
         System.out.println("2 = marcas de vehiculo");
         System.out.println("3 = datos del taller");
         System.out.println("4 = impuestos");
-        int opcion = sc.nextInt();
+
+        int opcion = lector.leerEntero("Presionar del 0 al 4 para las opciones");
 
         switch(opcion) {
             case 0:
-                tipoServicio(sc);
+                tipoServicio();
                 break;
             case 1:
-                precioServicio(sc);
+                precioServicio();
                 break;
             case 2:
-                marcasVehiculo(sc);
+                marcasVehiculo();
                 break;
             case 3:
                 datosTaller();
                 break;
             case 4:
-                impuestos(sc);
+                impuestos();
                 break;
             default:
                 System.out.println("opcion no valida");
@@ -33,10 +37,10 @@ public class configuracion {
         }
     }
 
-    private void tipoServicio(Scanner sc) {
+    private void tipoServicio() {
         System.out.println("tipo de servicio");
         mostrarServicios();
-        int opcionServicio = sc.nextInt();
+        int opcionServicio = lector.leerEntero("escoger servicio");
 
         switch(opcionServicio) {
             case 0:
@@ -69,10 +73,10 @@ public class configuracion {
         }
     }
 
-    private void precioServicio(Scanner sc) {
+    private void precioServicio() {
         System.out.println("precio de cada servicio");
         mostrarServicios();
-        int opcionServicio = sc.nextInt();
+        int opcionServicio = lector.leerEntero("escoger servicio");
 
         switch(opcionServicio) {
             case 0:
@@ -105,9 +109,8 @@ public class configuracion {
         }
     }
 
-    private void marcasVehiculo(Scanner sc) {
+    private void marcasVehiculo() {
         System.out.println("marcas de vehiculo");
-        System.out.println("ingresar del 0 a 6 para escoger una opcion");
         System.out.println("0 = toyota");
         System.out.println("1 = volkswagen");
         System.out.println("2 = chevrolet");
@@ -115,7 +118,8 @@ public class configuracion {
         System.out.println("4 = yamaha");
         System.out.println("5 = bajaj");
         System.out.println("6 = otros");
-        int opcionMarca = sc.nextInt();
+
+        int opcionMarca = lector.leerEntero("ingresar del 0 a 6 para escoger una opcion");
 
         switch(opcionMarca) {
             case 0:
@@ -137,9 +141,7 @@ public class configuracion {
                 System.out.println("el vehiculo pertenece a bajaj");
                 break;
             case 6:
-                sc.nextLine();
-                System.out.println("agregar la marca del vehiculo");
-                String marcaVehiculo = sc.nextLine();
+                String marcaVehiculo = lector.leerTexto("agregar la marca del vehiculo");
                 System.out.println("la marca del vehiculo es: " + marcaVehiculo);
                 break;
             default:
@@ -155,12 +157,13 @@ public class configuracion {
         System.out.println("descripcion: Taller de coches con rapida solucion de problemas y acceso a repuestos.");
     }
 
-    private void impuestos(Scanner sc) {
+    private void impuestos() {
         System.out.println("impuestos");
         System.out.println("0 = ver tasa de IGV actual");
         System.out.println("1 = activar IGV en facturacion");
         System.out.println("2 = configurar detraccion (10% para montos > S/ 700)");
-        int opcionImpuesto = sc.nextInt();
+
+        int opcionImpuesto = lector.leerEntero("escoger opcion");
 
         switch(opcionImpuesto) {
             case 0:
@@ -171,8 +174,7 @@ public class configuracion {
                 System.out.println("se activa el IGV");
                 break;
             case 2:
-                System.out.println("escribir el monto");
-                double monto = sc.nextDouble();
+                double monto = lector.leerDecimal("escribir el monto");
                 if(monto > 700) {
                     double descuento = monto * 0.1;
                     double total = monto - descuento;

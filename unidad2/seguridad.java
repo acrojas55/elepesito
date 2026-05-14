@@ -1,28 +1,35 @@
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.List;
 
-public class seguridad {
-    public void mostrar(Scanner sc, ArrayList<Usuarios> listaUsuarios) {
+public class Seguridad {
+    private final LectorConsola lector;
+    private final List<Usuario> usuarios;
+
+    public Seguridad(LectorConsola lector, List<Usuario> usuarios) {
+        this.lector = lector;
+        this.usuarios = usuarios;
+    }
+
+    public void mostrar() {
         System.out.println("seguridad");
-        System.out.println("presionar del 0 al 3 para ingresar a cada opcion");
         System.out.println("0 = crear usuario");
         System.out.println("1 = modificar usuario");
         System.out.println("2 = eliminar usuario");
         System.out.println("3 = listar usuarios");
-        int opcion = sc.nextInt();
+
+        int opcion = lector.leerEntero("Presionar del 0 al 3 para ingresar a cada opcion");
 
         switch(opcion) {
             case 0:
-                crearUsuario(sc, listaUsuarios);
+                crearUsuario();
                 break;
             case 1:
-                modificarUsuario(sc, listaUsuarios);
+                modificarUsuario();
                 break;
             case 2:
-                eliminarUsuario(sc, listaUsuarios);
+                eliminarUsuario();
                 break;
             case 3:
-                listarUsuarios(listaUsuarios);
+                listarUsuarios();
                 break;
             default:
                 System.out.println("opcion no valida");
@@ -30,73 +37,59 @@ public class seguridad {
         }
     }
 
-    private void crearUsuario(Scanner sc, ArrayList<Usuarios> listaUsuarios) {
+    private void crearUsuario() {
         System.out.println("crear usuario");
-        sc.nextLine();
+        String nombre = lector.leerTexto("ingresar nombre");
+        String apellido = lector.leerTexto("ingresar apellido");
+        String rol = lector.leerTexto("ingresar rol");
+        String usuario = lector.leerTexto("ingresar usuario");
+        String contrasena = lector.leerTexto("ingresar contrasena");
 
-        System.out.println("ingresar nombre");
-        String nombre = sc.nextLine();
-        System.out.println("ingresar apellido");
-        String apellido = sc.nextLine();
-        System.out.println("ingresar rol");
-        String rol = sc.nextLine();
-        System.out.println("ingresar usuario");
-        String usuario = sc.nextLine();
-        System.out.println("ingresar contrasena");
-        String contrasena = sc.nextLine();
-
-        listaUsuarios.add(new Usuarios(nombre, apellido, rol, usuario, contrasena));
+        usuarios.add(new Usuario(nombre, apellido, rol, usuario, contrasena));
         System.out.println("usuario creado exitosamente");
         System.out.println("usuario es " + nombre + " con el rol de " + rol);
     }
 
-    private void modificarUsuario(Scanner sc, ArrayList<Usuarios> listaUsuarios) {
+    private void modificarUsuario() {
         System.out.println("modificar usuario");
 
-        if(listaUsuarios.isEmpty()) {
+        if(usuarios.isEmpty()) {
             System.out.println("no hay usuarios registrados");
             return;
         }
 
-        listarUsuarios(listaUsuarios);
-        System.out.println("que numero de usuario desea modificar?");
-        int pos = sc.nextInt() - 1;
+        listarUsuarios();
+        int posicion = lector.leerEntero("que numero de usuario desea modificar?") - 1;
 
-        if(pos < 0 || pos >= listaUsuarios.size()) {
+        if(posicion < 0 || posicion >= usuarios.size()) {
             System.out.println("posicion no valida");
             return;
         }
 
-        Usuarios usuarioModificado = listaUsuarios.get(pos);
-        System.out.println("ingresar del 0 al 4 que dato desea modificar");
+        Usuario usuarioModificado = usuarios.get(posicion);
         System.out.println("0 = nombre");
         System.out.println("1 = apellido");
         System.out.println("2 = rol");
         System.out.println("3 = usuario");
         System.out.println("4 = contrasena");
-        int dato = sc.nextInt();
-        sc.nextLine();
+
+        int dato = lector.leerEntero("ingresar del 0 al 4 que dato desea modificar");
 
         switch(dato) {
             case 0:
-                System.out.println("ingresar nuevo nombre");
-                usuarioModificado.nombre = sc.nextLine();
+                usuarioModificado.setNombre(lector.leerTexto("ingresar nuevo nombre"));
                 break;
             case 1:
-                System.out.println("ingresar nuevo apellido");
-                usuarioModificado.apellido = sc.nextLine();
+                usuarioModificado.setApellido(lector.leerTexto("ingresar nuevo apellido"));
                 break;
             case 2:
-                System.out.println("ingresar nuevo rol");
-                usuarioModificado.rol = sc.nextLine();
+                usuarioModificado.setRol(lector.leerTexto("ingresar nuevo rol"));
                 break;
             case 3:
-                System.out.println("ingresar nuevo usuario");
-                usuarioModificado.usuario = sc.nextLine();
+                usuarioModificado.setUsuario(lector.leerTexto("ingresar nuevo usuario"));
                 break;
             case 4:
-                System.out.println("ingresar nueva contrasena");
-                usuarioModificado.contrasena = sc.nextLine();
+                usuarioModificado.setContrasena(lector.leerTexto("ingresar nueva contrasena"));
                 break;
             default:
                 System.out.println("dato no valido");
@@ -106,36 +99,36 @@ public class seguridad {
         System.out.println("usuario modificado exitosamente");
     }
 
-    private void eliminarUsuario(Scanner sc, ArrayList<Usuarios> listaUsuarios) {
+    private void eliminarUsuario() {
         System.out.println("eliminar usuario");
 
-        if(listaUsuarios.isEmpty()) {
+        if(usuarios.isEmpty()) {
             System.out.println("no hay usuarios registrados");
             return;
         }
 
-        listarUsuarios(listaUsuarios);
-        System.out.println("que numero de usuario desea eliminar?");
-        int posEliminar = sc.nextInt() - 1;
+        listarUsuarios();
+        int posicion = lector.leerEntero("que numero de usuario desea eliminar?") - 1;
 
-        if(posEliminar < 0 || posEliminar >= listaUsuarios.size()) {
+        if(posicion < 0 || posicion >= usuarios.size()) {
             System.out.println("posicion no valida");
         } else {
-            listaUsuarios.remove(posEliminar);
+            usuarios.remove(posicion);
             System.out.println("usuario eliminado exitosamente");
         }
     }
 
-    private void listarUsuarios(ArrayList<Usuarios> listaUsuarios) {
+    private void listarUsuarios() {
         System.out.println("listar usuarios");
 
-        if(listaUsuarios.isEmpty()) {
+        if(usuarios.isEmpty()) {
             System.out.println("no hay usuarios registrados");
-        } else {
-            for(int i = 0; i < listaUsuarios.size(); i++) {
-                System.out.println("usuario " + (i + 1));
-                listaUsuarios.get(i).mostrarUsuario();
-            }
+            return;
+        }
+
+        for(int i = 0; i < usuarios.size(); i++) {
+            System.out.println("usuario " + (i + 1));
+            usuarios.get(i).mostrar();
         }
     }
 }

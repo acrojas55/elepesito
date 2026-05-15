@@ -21,26 +21,36 @@ public class Menu {
         this.reportes = new Reportes(lector, vehiculos);
     }
 
-    public void mostrar() {
+    public void mostrar(Usuario usuarioAutenticado) {
         int opcion;
 
         do {
-            mostrarOpciones();
+            mostrarOpciones(usuarioAutenticado);
             opcion = lector.leerEntero("Ingresar una opcion del 0 al 5");
-            ejecutarOpcion(opcion);
+            ejecutarOpcion(opcion, usuarioAutenticado);
+            if(opcion != 5) {
+                VistaConsola.pausa(lector);
+            }
         } while(opcion != 5);
     }
 
-    private void mostrarOpciones() {
-        System.out.println("0 = seguridad");
-        System.out.println("1 = configuracion");
-        System.out.println("2 = transacciones");
-        System.out.println("3 = consultas");
-        System.out.println("4 = reportes");
-        System.out.println("5 = salir");
+    private void mostrarOpciones(Usuario usuarioAutenticado) {
+        VistaConsola.encabezado("Car Center Tarapoto", "Menu disponible para rol: " + usuarioAutenticado.getRol());
+        mostrarOpcionSiTienePermiso(0, "seguridad", usuarioAutenticado);
+        mostrarOpcionSiTienePermiso(1, "configuracion", usuarioAutenticado);
+        mostrarOpcionSiTienePermiso(2, "transacciones", usuarioAutenticado);
+        mostrarOpcionSiTienePermiso(3, "consultas", usuarioAutenticado);
+        mostrarOpcionSiTienePermiso(4, "reportes", usuarioAutenticado);
+        VistaConsola.opcionSalida(5);
+        VistaConsola.saltoPagina();
     }
 
-    private void ejecutarOpcion(int opcion) {
+    private void ejecutarOpcion(int opcion, Usuario usuarioAutenticado) {
+        if(opcion != 5 && !tienePermiso(usuarioAutenticado, opcion)) {
+            VistaConsola.error("No tiene permiso para ingresar a esta opcion");
+            return;
+        }
+
         switch(opcion) {
             case 0:
                 seguridad.mostrar();
@@ -49,7 +59,7 @@ public class Menu {
                 configuracion.mostrar();
                 break;
             case 2:
-                transacciones.mostrar();
+                transacciones.mostrar(usuarioAutenticado);
                 break;
             case 3:
                 consultas.mostrar();
@@ -58,11 +68,40 @@ public class Menu {
                 reportes.mostrar();
                 break;
             case 5:
-                System.out.println("salir");
+                VistaConsola.exito("Gracias por usar el sistema. Hasta pronto.");
                 break;
             default:
-                System.out.println("opcion no valida");
+                VistaConsola.error("Opcion no valida");
                 break;
+        }
+    }
+
+    private void mostrarOpcionSiTienePermiso(int opcion, String nombre, Usuario usuarioAutenticado) {
+        if(tienePermiso(usuarioAutenticado, opcion)) {
+            VistaConsola.opcion(opcion, nombre);
+        }
+    }
+
+    private boolean tienePermiso(Usuario usuarioAutenticado, int opcion) {
+        String rol = usuarioAutenticado.getRol();
+
+        if(Rol.ADMINISTRADOR.equalsIgnoreCase(rol)) {
+            return true;
+        }
+
+        switch(opcion) {
+            case 0:
+                return false;
+            case 1:
+                return Rol.GERENTE.equalsIgnoreCase(rol);
+            case 2:
+                return Rol.GERENTE.equalsIgnoreCase(rol) || Rol.RECEPCIONISTA.equalsIgnoreCase(rol) || Rol.MECANICO.equalsIgnoreCase(rol);
+            case 3:
+                return Rol.GERENTE.equalsIgnoreCase(rol) || Rol.RECEPCIONISTA.equalsIgnoreCase(rol) || Rol.MECANICO.equalsIgnoreCase(rol);
+            case 4:
+                return Rol.GERENTE.equalsIgnoreCase(rol);
+            default:
+                return false;
         }
     }
 }

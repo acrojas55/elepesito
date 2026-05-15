@@ -10,11 +10,12 @@ public class Seguridad {
     }
 
     public void mostrar() {
-        System.out.println("seguridad");
-        System.out.println("0 = crear usuario");
-        System.out.println("1 = modificar usuario");
-        System.out.println("2 = eliminar usuario");
-        System.out.println("3 = listar usuarios");
+        VistaConsola.encabezado("Seguridad");
+        VistaConsola.opcion(0, "crear usuario");
+        VistaConsola.opcion(1, "modificar usuario");
+        VistaConsola.opcion(2, "eliminar usuario");
+        VistaConsola.opcion(3, "listar usuarios");
+        VistaConsola.saltoPagina();
 
         int opcion = lector.leerEntero("Presionar del 0 al 3 para ingresar a cada opcion");
 
@@ -32,29 +33,29 @@ public class Seguridad {
                 listarUsuarios();
                 break;
             default:
-                System.out.println("opcion no valida");
+                VistaConsola.error("Opcion no valida");
                 break;
         }
     }
 
     private void crearUsuario() {
-        System.out.println("crear usuario");
+        VistaConsola.seccion("Crear usuario");
         String nombre = lector.leerTexto("ingresar nombre");
         String apellido = lector.leerTexto("ingresar apellido");
-        String rol = lector.leerTexto("ingresar rol");
+        String rol = seleccionarRol();
         String usuario = lector.leerTexto("ingresar usuario");
         String contrasena = lector.leerTexto("ingresar contrasena");
 
         usuarios.add(new Usuario(nombre, apellido, rol, usuario, contrasena));
-        System.out.println("usuario creado exitosamente");
-        System.out.println("usuario es " + nombre + " con el rol de " + rol);
+        VistaConsola.exito("Usuario creado exitosamente");
+        VistaConsola.info("Usuario: " + nombre + " | Rol: " + rol);
     }
 
     private void modificarUsuario() {
-        System.out.println("modificar usuario");
+        VistaConsola.seccion("Modificar usuario");
 
         if(usuarios.isEmpty()) {
-            System.out.println("no hay usuarios registrados");
+            VistaConsola.info("No hay usuarios registrados");
             return;
         }
 
@@ -62,16 +63,16 @@ public class Seguridad {
         int posicion = lector.leerEntero("que numero de usuario desea modificar?") - 1;
 
         if(posicion < 0 || posicion >= usuarios.size()) {
-            System.out.println("posicion no valida");
+            VistaConsola.error("Posicion no valida");
             return;
         }
 
         Usuario usuarioModificado = usuarios.get(posicion);
-        System.out.println("0 = nombre");
-        System.out.println("1 = apellido");
-        System.out.println("2 = rol");
-        System.out.println("3 = usuario");
-        System.out.println("4 = contrasena");
+        VistaConsola.opcion(0, "nombre");
+        VistaConsola.opcion(1, "apellido");
+        VistaConsola.opcion(2, "rol");
+        VistaConsola.opcion(3, "usuario");
+        VistaConsola.opcion(4, "contrasena");
 
         int dato = lector.leerEntero("ingresar del 0 al 4 que dato desea modificar");
 
@@ -83,7 +84,7 @@ public class Seguridad {
                 usuarioModificado.setApellido(lector.leerTexto("ingresar nuevo apellido"));
                 break;
             case 2:
-                usuarioModificado.setRol(lector.leerTexto("ingresar nuevo rol"));
+                usuarioModificado.setRol(seleccionarRol());
                 break;
             case 3:
                 usuarioModificado.setUsuario(lector.leerTexto("ingresar nuevo usuario"));
@@ -92,18 +93,18 @@ public class Seguridad {
                 usuarioModificado.setContrasena(lector.leerTexto("ingresar nueva contrasena"));
                 break;
             default:
-                System.out.println("dato no valido");
+                VistaConsola.error("Dato no valido");
                 return;
         }
 
-        System.out.println("usuario modificado exitosamente");
+        VistaConsola.exito("Usuario modificado exitosamente");
     }
 
     private void eliminarUsuario() {
-        System.out.println("eliminar usuario");
+        VistaConsola.seccion("Eliminar usuario");
 
         if(usuarios.isEmpty()) {
-            System.out.println("no hay usuarios registrados");
+            VistaConsola.info("No hay usuarios registrados");
             return;
         }
 
@@ -111,24 +112,47 @@ public class Seguridad {
         int posicion = lector.leerEntero("que numero de usuario desea eliminar?") - 1;
 
         if(posicion < 0 || posicion >= usuarios.size()) {
-            System.out.println("posicion no valida");
+            VistaConsola.error("Posicion no valida");
         } else {
             usuarios.remove(posicion);
-            System.out.println("usuario eliminado exitosamente");
+            VistaConsola.exito("Usuario eliminado exitosamente");
         }
     }
 
     private void listarUsuarios() {
-        System.out.println("listar usuarios");
+        VistaConsola.seccion("Listar usuarios");
 
         if(usuarios.isEmpty()) {
-            System.out.println("no hay usuarios registrados");
+            VistaConsola.info("No hay usuarios registrados");
             return;
         }
 
         for(int i = 0; i < usuarios.size(); i++) {
             System.out.println("usuario " + (i + 1));
             usuarios.get(i).mostrar();
+        }
+    }
+
+    private String seleccionarRol() {
+        VistaConsola.opcion(0, "Administrador");
+        VistaConsola.opcion(1, "Gerente");
+        VistaConsola.opcion(2, "Recepcionista");
+        VistaConsola.opcion(3, "Mecanico");
+
+        int opcionRol = lector.leerEntero("seleccionar rol");
+
+        switch(opcionRol) {
+            case 0:
+                return Rol.ADMINISTRADOR;
+            case 1:
+                return Rol.GERENTE;
+            case 2:
+                return Rol.RECEPCIONISTA;
+            case 3:
+                return Rol.MECANICO;
+            default:
+                VistaConsola.info("Rol no valido, se asigna Recepcionista");
+                return Rol.RECEPCIONISTA;
         }
     }
 }

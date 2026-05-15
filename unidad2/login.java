@@ -7,18 +7,20 @@ public class Login {
         this.usuarios = usuarios;
     }
 
-    public boolean autenticar(LectorConsola lector) {
+    public Usuario autenticar(LectorConsola lector) {
         String usuario = lector.leerTexto("Ingresar usuario");
         String contrasena = lector.leerTexto("Ingresar contrasena");
 
         for(Usuario usuarioRegistrado : usuarios) {
             if(usuarioRegistrado.validarCredenciales(usuario, contrasena)) {
-                System.out.println("Bienvenido");
-                return true;
+                VistaConsola.saltoPagina();
+                VistaConsola.exito("Bienvenido " + usuarioRegistrado.getNombre());
+                VistaConsola.info("Rol: " + usuarioRegistrado.getRol());
+                return usuarioRegistrado;
             }
         }
 
-        System.out.println("Usuario o contrasena incorrecta");
-        return false;
+        VistaConsola.error("Usuario o contrasena incorrecta");
+        return null;
     }
 }

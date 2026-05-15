@@ -9,16 +9,22 @@ public class Transacciones {
         this.vehiculos = vehiculos;
     }
 
-    public void mostrar() {
-        System.out.println("transacciones");
-        System.out.println("0 = registrar vehiculo");
-        System.out.println("1 = registrar salida de vehiculo");
-        System.out.println("2 = registrar pago");
-        System.out.println("3 = generar factura o boleta");
-        System.out.println("4 = registrar observaciones del cliente");
-        System.out.println("5 = enlistar vehiculos");
+    public void mostrar(Usuario usuarioAutenticado) {
+        VistaConsola.encabezado("Transacciones", "Rol activo: " + usuarioAutenticado.getRol());
+        mostrarOpcionSiTienePermiso(0, "registrar vehiculo", usuarioAutenticado);
+        mostrarOpcionSiTienePermiso(1, "registrar salida de vehiculo", usuarioAutenticado);
+        mostrarOpcionSiTienePermiso(2, "registrar pago", usuarioAutenticado);
+        mostrarOpcionSiTienePermiso(3, "generar factura o boleta", usuarioAutenticado);
+        mostrarOpcionSiTienePermiso(4, "registrar observaciones del cliente", usuarioAutenticado);
+        mostrarOpcionSiTienePermiso(5, "enlistar vehiculos", usuarioAutenticado);
+        VistaConsola.saltoPagina();
 
         int opcion = lector.leerEntero("Presionar del 0 al 5 para ingresar a cada opcion");
+
+        if(!tienePermiso(usuarioAutenticado, opcion)) {
+            VistaConsola.error("No tiene permiso para ingresar a esta opcion con el rol " + usuarioAutenticado.getRol());
+            return;
+        }
 
         switch(opcion) {
             case 0:
@@ -40,17 +46,50 @@ public class Transacciones {
                 listarVehiculos();
                 break;
             default:
-                System.out.println("opcion no valida");
+                VistaConsola.error("Opcion no valida");
                 break;
         }
     }
 
+    private void mostrarOpcionSiTienePermiso(int opcion, String nombre, Usuario usuarioAutenticado) {
+        if(tienePermiso(usuarioAutenticado, opcion)) {
+            VistaConsola.opcion(opcion, nombre);
+        }
+    }
+
+    private boolean tienePermiso(Usuario usuarioAutenticado, int opcion) {
+        String rol = usuarioAutenticado.getRol();
+
+        if(Rol.ADMINISTRADOR.equalsIgnoreCase(rol) || Rol.GERENTE.equalsIgnoreCase(rol)) {
+            return true;
+        }
+
+        if(Rol.RECEPCIONISTA.equalsIgnoreCase(rol)) {
+            switch(opcion) {
+                case 0:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        if(Rol.MECANICO.equalsIgnoreCase(rol)) {
+            return opcion == 4 || opcion == 5;
+        }
+
+        return false;
+    }
+
     private void registrarVehiculo() {
-        System.out.println("registrar vehiculo");
+        VistaConsola.seccion("Registrar vehiculo");
         String placa = lector.leerTexto("ingresar la placa del vehiculo");
 
         if(buscarPorPlaca(placa) != null) {
-            System.out.println("ya existe un vehiculo registrado con esa placa");
+            VistaConsola.error("Ya existe un vehiculo registrado con esa placa");
             return;
         }
 
@@ -61,11 +100,11 @@ public class Transacciones {
         Vehiculo vehiculo = new Vehiculo(placa, modelo, anio, cilindrada);
         vehiculo.agregarHistorial("Vehiculo registrado en el taller");
         vehiculos.add(vehiculo);
-        System.out.println("vehiculo registrado exitosamente");
+        VistaConsola.exito("Vehiculo registrado exitosamente");
     }
 
     private void registrarSalida() {
-        System.out.println("registrar salida de vehiculo");
+        VistaConsola.seccion("Registrar salida de vehiculo");
         Vehiculo vehiculo = pedirVehiculoPorPlaca();
 
         if(vehiculo == null) {
@@ -81,12 +120,12 @@ public class Transacciones {
         String horaSalida = hora + ":" + minutos;
 
         vehiculo.registrarSalida(fecha, horaSalida);
-        System.out.println("el vehiculo sale del taller la fecha " + fecha);
-        System.out.println("y la hora de salida es de: " + horaSalida);
+        VistaConsola.exito("Salida registrada");
+        VistaConsola.info("Fecha: " + fecha + " | Hora: " + horaSalida);
     }
 
     private void registrarPago() {
-        System.out.println("registrar pago");
+        VistaConsola.seccion("Registrar pago");
         Vehiculo vehiculo = pedirVehiculoPorPlaca();
 
         if(vehiculo == null) {
@@ -94,26 +133,27 @@ public class Transacciones {
         }
 
         double montoPagar = lector.leerDecimal("ingresar el monto de pago");
-        System.out.println("0 = yape");
-        System.out.println("1 = plin");
-        System.out.println("2 = credito");
-        System.out.println("3 = debito");
-        System.out.println("4 = efectivo");
+        VistaConsola.opcion(0, "yape");
+        VistaConsola.opcion(1, "plin");
+        VistaConsola.opcion(2, "credito");
+        VistaConsola.opcion(3, "debito");
+        VistaConsola.opcion(4, "efectivo");
 
         int opcionPago = lector.leerEntero("ingresar del 0 al 4 para escoger el metodo de pago");
         String metodoPago = obtenerMetodoPago(opcionPago);
 
         if(metodoPago == null) {
-            System.out.println("no se escogio el metodo de pago");
+            VistaConsola.error("No se escogio el metodo de pago");
             return;
         }
 
         vehiculo.registrarPago(montoPagar, metodoPago);
-        System.out.println("se paga el total de: " + montoPagar + " con " + metodoPago);
+        VistaConsola.exito("Pago registrado");
+        VistaConsola.info("Total: S/ " + montoPagar + " | Metodo: " + metodoPago);
     }
 
     private void generarComprobante() {
-        System.out.println("generar factura o boleta");
+        VistaConsola.seccion("Generar factura o boleta");
         Vehiculo vehiculo = pedirVehiculoPorPlaca();
 
         if(vehiculo == null) {
@@ -124,24 +164,24 @@ public class Transacciones {
 
         switch(opcionGenerar) {
             case 0:
-                System.out.println("-----------factura---------");
-                System.out.println("----CAR CENTER TARAPOTO----");
-                System.out.println("-Jr. libertad 238, tarapoto-");
+                VistaConsola.seccion("Factura");
+                VistaConsola.info("CAR CENTER TARAPOTO");
+                VistaConsola.info("Jr. libertad 238, tarapoto");
                 vehiculo.mostrar();
                 break;
             case 1:
-                System.out.println("----------boleta-----------");
-                System.out.println("----CAR CENTER TARAPOTO----");
+                VistaConsola.seccion("Boleta");
+                VistaConsola.info("CAR CENTER TARAPOTO");
                 vehiculo.mostrar();
                 break;
             default:
-                System.out.println("opcion no valida");
+                VistaConsola.error("Opcion no valida");
                 break;
         }
     }
 
     private void registrarObservacion() {
-        System.out.println("registrar observaciones del cliente");
+        VistaConsola.seccion("Registrar observaciones del cliente");
         Vehiculo vehiculo = pedirVehiculoPorPlaca();
 
         if(vehiculo == null) {
@@ -150,14 +190,15 @@ public class Transacciones {
 
         String observacion = lector.leerTexto("ingresar observacion");
         vehiculo.agregarObservacion(observacion);
-        System.out.println("observacion: " + observacion);
+        VistaConsola.exito("Observacion registrada");
+        VistaConsola.info("Observacion: " + observacion);
     }
 
     private void listarVehiculos() {
-        System.out.println("enlistar vehiculos");
+        VistaConsola.seccion("Enlistar vehiculos");
 
         if(vehiculos.isEmpty()) {
-            System.out.println("no hay vehiculos registrados");
+            VistaConsola.info("No hay vehiculos registrados");
             return;
         }
 
@@ -169,7 +210,7 @@ public class Transacciones {
 
     private Vehiculo pedirVehiculoPorPlaca() {
         if(vehiculos.isEmpty()) {
-            System.out.println("no hay vehiculos registrados");
+            VistaConsola.info("No hay vehiculos registrados");
             return null;
         }
 
@@ -177,7 +218,7 @@ public class Transacciones {
         Vehiculo vehiculo = buscarPorPlaca(placa);
 
         if(vehiculo == null) {
-            System.out.println("no se encontro un vehiculo con esa placa");
+            VistaConsola.error("No se encontro un vehiculo con esa placa");
         }
 
         return vehiculo;

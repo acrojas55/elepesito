@@ -37,6 +37,10 @@ public class Usuario {
         return nombre;
     }
 
+    public String getRol() {
+        return rol;
+    }
+
     public boolean validarCredenciales(String usuario, String contrasena) {
         return this.usuario.equals(usuario) && this.contrasena.equals(contrasena);
     }

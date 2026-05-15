@@ -6,12 +6,13 @@ public class Configuracion {
     }
 
     public void mostrar() {
-        System.out.println("configuracion");
-        System.out.println("0 = tipo de servicio");
-        System.out.println("1 = precio de cada servicio");
-        System.out.println("2 = marcas de vehiculo");
-        System.out.println("3 = datos del taller");
-        System.out.println("4 = impuestos");
+        VistaConsola.encabezado("Configuracion");
+        VistaConsola.opcion(0, "tipo de servicio");
+        VistaConsola.opcion(1, "precio de cada servicio");
+        VistaConsola.opcion(2, "marcas de vehiculo");
+        VistaConsola.opcion(3, "datos del taller");
+        VistaConsola.opcion(4, "impuestos");
+        VistaConsola.saltoPagina();
 
         int opcion = lector.leerEntero("Presionar del 0 al 4 para las opciones");
 
@@ -32,13 +33,13 @@ public class Configuracion {
                 impuestos();
                 break;
             default:
-                System.out.println("opcion no valida");
+                VistaConsola.error("Opcion no valida");
                 break;
         }
     }
 
     private void tipoServicio() {
-        System.out.println("tipo de servicio");
+        VistaConsola.seccion("Tipo de servicio");
         mostrarServicios();
         int opcionServicio = lector.leerEntero("escoger servicio");
 
@@ -65,16 +66,16 @@ public class Configuracion {
                 System.out.println("servicios especializados");
                 break;
             case 7:
-                System.out.println("servicios adicionales");
+                VistaConsola.info("Servicios adicionales");
                 break;
             default:
-                System.out.println("opcion no valida");
+                VistaConsola.error("Opcion no valida");
                 break;
         }
     }
 
     private void precioServicio() {
-        System.out.println("precio de cada servicio");
+        VistaConsola.seccion("Precio de cada servicio");
         mostrarServicios();
         int opcionServicio = lector.leerEntero("escoger servicio");
 
@@ -101,23 +102,23 @@ public class Configuracion {
                 System.out.println("servicios especializados: desde 170 soles");
                 break;
             case 7:
-                System.out.println("servicios adicionales: desde 45 soles");
+                VistaConsola.info("Servicios adicionales: desde 45 soles");
                 break;
             default:
-                System.out.println("opcion no valida");
+                VistaConsola.error("Opcion no valida");
                 break;
         }
     }
 
     private void marcasVehiculo() {
-        System.out.println("marcas de vehiculo");
-        System.out.println("0 = toyota");
-        System.out.println("1 = volkswagen");
-        System.out.println("2 = chevrolet");
-        System.out.println("3 = honda");
-        System.out.println("4 = yamaha");
-        System.out.println("5 = bajaj");
-        System.out.println("6 = otros");
+        VistaConsola.seccion("Marcas de vehiculo");
+        VistaConsola.opcion(0, "toyota");
+        VistaConsola.opcion(1, "volkswagen");
+        VistaConsola.opcion(2, "chevrolet");
+        VistaConsola.opcion(3, "honda");
+        VistaConsola.opcion(4, "yamaha");
+        VistaConsola.opcion(5, "bajaj");
+        VistaConsola.opcion(6, "otros");
 
         int opcionMarca = lector.leerEntero("ingresar del 0 a 6 para escoger una opcion");
 
@@ -142,61 +143,61 @@ public class Configuracion {
                 break;
             case 6:
                 String marcaVehiculo = lector.leerTexto("agregar la marca del vehiculo");
-                System.out.println("la marca del vehiculo es: " + marcaVehiculo);
+                VistaConsola.info("La marca del vehiculo es: " + marcaVehiculo);
                 break;
             default:
-                System.out.println("opcion no valida");
+                VistaConsola.error("Opcion no valida");
                 break;
         }
     }
 
     private void datosTaller() {
-        System.out.println("datos del taller");
-        System.out.println("-------CAR CENTER TARAPOTO-----");
-        System.out.println("ubicacion: Jr. libertad 238, tarapoto");
-        System.out.println("descripcion: Taller de coches con rapida solucion de problemas y acceso a repuestos.");
+        VistaConsola.seccion("Datos del taller");
+        VistaConsola.info("CAR CENTER TARAPOTO");
+        VistaConsola.info("Ubicacion: Jr. libertad 238, tarapoto");
+        VistaConsola.info("Descripcion: Taller de coches con rapida solucion de problemas y acceso a repuestos.");
     }
 
     private void impuestos() {
-        System.out.println("impuestos");
-        System.out.println("0 = ver tasa de IGV actual");
-        System.out.println("1 = activar IGV en facturacion");
-        System.out.println("2 = configurar detraccion (10% para montos > S/ 700)");
+        VistaConsola.seccion("Impuestos");
+        VistaConsola.opcion(0, "ver tasa de IGV actual");
+        VistaConsola.opcion(1, "activar IGV en facturacion");
+        VistaConsola.opcion(2, "configurar detraccion (10% para montos > S/ 700)");
 
         int opcionImpuesto = lector.leerEntero("escoger opcion");
 
         switch(opcionImpuesto) {
             case 0:
                 double igv = 18;
-                System.out.println("tasa IGV actual: " + igv + "%");
+                VistaConsola.info("Tasa IGV actual: " + igv + "%");
                 break;
             case 1:
-                System.out.println("se activa el IGV");
+                VistaConsola.exito("Se activa el IGV");
                 break;
             case 2:
                 double monto = lector.leerDecimal("escribir el monto");
                 if(monto > 700) {
                     double descuento = monto * 0.1;
                     double total = monto - descuento;
-                    System.out.println("el monto a pagar es = " + total);
+                    VistaConsola.info("El monto a pagar es = " + total);
                 } else {
-                    System.out.println("no aplica detraccion");
+                    VistaConsola.info("No aplica detraccion");
                 }
                 break;
             default:
-                System.out.println("opcion no valida");
+                VistaConsola.error("Opcion no valida");
                 break;
         }
     }
 
     private void mostrarServicios() {
-        System.out.println("0 = mantenimiento preventivo");
-        System.out.println("1 = reparaciones mecanicas");
-        System.out.println("2 = servicios electricos y electronicos");
-        System.out.println("3 = servicios de carroceria y pintura");
-        System.out.println("4 = servicios de neumaticos");
-        System.out.println("5 = servicios de diagnostico y asesoria");
-        System.out.println("6 = servicios especializados");
-        System.out.println("7 = servicios adicionales");
+        VistaConsola.opcion(0, "mantenimiento preventivo");
+        VistaConsola.opcion(1, "reparaciones mecanicas");
+        VistaConsola.opcion(2, "servicios electricos y electronicos");
+        VistaConsola.opcion(3, "servicios de carroceria y pintura");
+        VistaConsola.opcion(4, "servicios de neumaticos");
+        VistaConsola.opcion(5, "servicios de diagnostico y asesoria");
+        VistaConsola.opcion(6, "servicios especializados");
+        VistaConsola.opcion(7, "servicios adicionales");
     }
 }

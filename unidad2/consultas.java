@@ -10,12 +10,13 @@ public class Consultas {
     }
 
     public void mostrar() {
-        System.out.println("consultas");
-        System.out.println("0 = buscar vehiculo por placa");
-        System.out.println("1 = ver vehiculos en espera");
-        System.out.println("2 = ver historial de reparaciones de un vehiculo");
-        System.out.println("3 = ver mecanicos disponibles");
-        System.out.println("4 = consultar servicios mas solicitados");
+        VistaConsola.encabezado("Consultas");
+        VistaConsola.opcion(0, "buscar vehiculo por placa");
+        VistaConsola.opcion(1, "ver vehiculos en espera");
+        VistaConsola.opcion(2, "ver historial de reparaciones de un vehiculo");
+        VistaConsola.opcion(3, "ver mecanicos disponibles");
+        VistaConsola.opcion(4, "consultar servicios mas solicitados");
+        VistaConsola.saltoPagina();
 
         int opcion = lector.leerEntero("Presionar del 0 al 4 para ingresar a cada opcion");
 
@@ -36,16 +37,16 @@ public class Consultas {
                 verServiciosMasSolicitados();
                 break;
             default:
-                System.out.println("opcion no valida");
+                VistaConsola.error("Opcion no valida");
                 break;
         }
     }
 
     private void buscarVehiculoPorPlaca() {
-        System.out.println("buscar vehiculo por placa");
+        VistaConsola.seccion("Buscar vehiculo por placa");
 
         if(vehiculos.isEmpty()) {
-            System.out.println("no hay vehiculos registrados");
+            VistaConsola.info("No hay vehiculos registrados");
             return;
         }
 
@@ -53,19 +54,19 @@ public class Consultas {
         Vehiculo vehiculo = buscarPorPlaca(placaBuscada);
 
         if(vehiculo == null) {
-            System.out.println("no se encontro un vehiculo con esa placa");
+            VistaConsola.error("No se encontro un vehiculo con esa placa");
             return;
         }
 
-        System.out.println("vehiculo encontrado:");
+        VistaConsola.exito("Vehiculo encontrado");
         vehiculo.mostrar();
     }
 
     private void verVehiculosEnEspera() {
-        System.out.println("ver vehiculos en espera");
+        VistaConsola.seccion("Ver vehiculos en espera");
 
         if(vehiculos.isEmpty()) {
-            System.out.println("no hay vehiculos en espera");
+            VistaConsola.info("No hay vehiculos en espera");
             return;
         }
 
@@ -80,15 +81,15 @@ public class Consultas {
         }
 
         if(!hayVehiculosEnEspera) {
-            System.out.println("no hay vehiculos en espera");
+            VistaConsola.info("No hay vehiculos en espera");
         }
     }
 
     private void verHistorial() {
-        System.out.println("ver historial de reparaciones de un vehiculo");
+        VistaConsola.seccion("Ver historial de reparaciones de un vehiculo");
 
         if(vehiculos.isEmpty()) {
-            System.out.println("no hay vehiculos registrados");
+            VistaConsola.info("No hay vehiculos registrados");
             return;
         }
 
@@ -96,11 +97,11 @@ public class Consultas {
         Vehiculo vehiculo = buscarPorPlaca(placaBuscada);
 
         if(vehiculo == null) {
-            System.out.println("no se encontro un vehiculo con esa placa");
+            VistaConsola.error("No se encontro un vehiculo con esa placa");
             return;
         }
 
-        System.out.println("historial del vehiculo:");
+        VistaConsola.info("Historial del vehiculo:");
         vehiculo.mostrar();
         vehiculo.mostrarHistorial();
     }
@@ -116,16 +117,16 @@ public class Consultas {
     }
 
     private void verMecanicosDisponibles() {
-        System.out.println("ver mecanicos disponibles");
-        System.out.println("mecanico 1: Carlos");
-        System.out.println("mecanico 2: Luis");
-        System.out.println("mecanico 3: Pedro");
+        VistaConsola.seccion("Ver mecanicos disponibles");
+        VistaConsola.info("Mecanico 1: Carlos");
+        VistaConsola.info("Mecanico 2: Luis");
+        VistaConsola.info("Mecanico 3: Pedro");
     }
 
     private void verServiciosMasSolicitados() {
-        System.out.println("consultar servicios mas solicitados");
-        System.out.println("1. cambio de aceite y filtro");
-        System.out.println("2. revision de frenos");
-        System.out.println("3. alineacion y balanceo");
+        VistaConsola.seccion("Consultar servicios mas solicitados");
+        VistaConsola.info("1. cambio de aceite y filtro");
+        VistaConsola.info("2. revision de frenos");
+        VistaConsola.info("3. alineacion y balanceo");
     }
 }

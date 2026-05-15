@@ -11,12 +11,13 @@ public class Reportes {
     }
 
     public void mostrar() {
-        System.out.println("reportes");
-        System.out.println("0 = reporte de ingresos del dia");
-        System.out.println("1 = reporte de vehiculos atendidos por semana");
-        System.out.println("2 = lista de vehiculos pendientes");
-        System.out.println("3 = reporte de mecanicos mas productivos");
-        System.out.println("4 = exportar a PDF");
+        VistaConsola.encabezado("Reportes");
+        VistaConsola.opcion(0, "reporte de ingresos del dia");
+        VistaConsola.opcion(1, "reporte de vehiculos atendidos por semana");
+        VistaConsola.opcion(2, "lista de vehiculos pendientes");
+        VistaConsola.opcion(3, "reporte de mecanicos mas productivos");
+        VistaConsola.opcion(4, "exportar a PDF");
+        VistaConsola.saltoPagina();
 
         int opcion = lector.leerEntero("Ingresar del 0 al 4 para ingresar a cualquier opcion");
 
@@ -37,7 +38,7 @@ public class Reportes {
                 exportarPdf();
                 break;
             default:
-                System.out.println("opcion no valida");
+                VistaConsola.error("Opcion no valida");
                 break;
         }
     }
@@ -49,8 +50,8 @@ public class Reportes {
             total += vehiculo.getTotalPagado();
         }
 
-        System.out.println("reporte del dia - ingresos");
-        System.out.println("ingresos registrados: S/ " + total);
+        VistaConsola.seccion("Reporte del dia - ingresos");
+        VistaConsola.info("Ingresos registrados: S/ " + total);
     }
 
     private void reporteVehiculosAtendidos() {
@@ -62,16 +63,16 @@ public class Reportes {
             }
         }
 
-        System.out.println("reporte de vehiculos atendidos por semana");
-        System.out.println("vehiculos atendidos: " + atendidos);
-        System.out.println("vehiculos registrados: " + vehiculos.size());
+        VistaConsola.seccion("Reporte de vehiculos atendidos por semana");
+        VistaConsola.info("Vehiculos atendidos: " + atendidos);
+        VistaConsola.info("Vehiculos registrados: " + vehiculos.size());
     }
 
     private void listarVehiculosPendientes() {
-        System.out.println("lista de vehiculos pendientes");
+        VistaConsola.seccion("Lista de vehiculos pendientes");
 
         if(vehiculos.isEmpty()) {
-            System.out.println("no hay vehiculos pendientes");
+            VistaConsola.info("No hay vehiculos pendientes");
             return;
         }
 
@@ -86,7 +87,7 @@ public class Reportes {
         }
 
         if(!hayPendientes) {
-            System.out.println("no hay vehiculos pendientes");
+            VistaConsola.info("No hay vehiculos pendientes");
         }
     }
 
@@ -99,15 +100,15 @@ public class Reportes {
             }
         }
 
-        System.out.println("reporte de mecanicos mas productivos");
-        System.out.println("Carlos: " + atendidos + " vehiculos atendidos");
-        System.out.println("Luis: 0 vehiculos atendidos");
-        System.out.println("Pedro: 0 vehiculos atendidos");
+        VistaConsola.seccion("Reporte de mecanicos mas productivos");
+        VistaConsola.info("Carlos: " + atendidos + " vehiculos atendidos");
+        VistaConsola.info("Luis: 0 vehiculos atendidos");
+        VistaConsola.info("Pedro: 0 vehiculos atendidos");
     }
 
     private void exportarPdf() {
-        System.out.println("exportar a PDF");
-        System.out.println("reporte generado: " + ARCHIVO_REPORTE_PREDETERMINADO);
-        System.out.println("vehiculos incluidos: " + vehiculos.size());
+        VistaConsola.seccion("Exportar a PDF");
+        VistaConsola.exito("Reporte generado: " + ARCHIVO_REPORTE_PREDETERMINADO);
+        VistaConsola.info("Vehiculos incluidos: " + vehiculos.size());
     }
 }

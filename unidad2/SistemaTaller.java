@@ -21,17 +21,27 @@ public class SistemaTaller {
     }
 
     public void iniciar() {
-        System.out.println("-----ADMINISTRADOR-----");
+        VistaConsola.encabezado("Login del sistema", "Car Center Tarapoto");
+        Usuario usuarioAutenticado = login.autenticar(lector);
 
-        if(login.autenticar(lector)) {
-            menu.mostrar();
+        if(usuarioAutenticado != null) {
+            VistaConsola.pausa(lector);
+            menu.mostrar(usuarioAutenticado);
         } else {
-            System.out.println("No se puede ingresar al menu");
+            VistaConsola.error("No se puede ingresar al menu");
         }
     }
 
     private void cargarUsuariosPredeterminados() {
-        usuarios.add(new Usuario("Administrador", "Sistema", "Administrador", "admin", "admin123"));
+        Usuario administrador = new Usuario("Administrador", "Sistema", Rol.ADMINISTRADOR, "admin", "admin123");
+        Usuario gerente = new Usuario("Gerente", "Sistema", Rol.GERENTE, "gerente", "gerente123");
+        Usuario recepcionista = new Usuario("Recepcionista", "Sistema", Rol.RECEPCIONISTA, "recepcion", "recepcion123");
+        Usuario mecanico = new Usuario("Mecanico", "Sistema", Rol.MECANICO, "mecanico", "mecanico123");
+
+        usuarios.add(administrador);
+        usuarios.add(gerente);
+        usuarios.add(recepcionista);
+        usuarios.add(mecanico);
     }
 
     private void cargarVehiculosPredeterminados() {

@@ -1,15 +1,16 @@
 import java.util.List;
 
-public class Seguridad {
+public class Seguridad extends ModuloBase {
     private final LectorConsola lector;
     private final List<Usuario> usuarios;
 
     public Seguridad(LectorConsola lector, List<Usuario> usuarios) {
+        super(0, "seguridad");
         this.lector = lector;
         this.usuarios = usuarios;
     }
 
-    public void mostrar() {
+    public void mostrar(Usuario usuarioAutenticado) {
         VistaConsola.encabezado("Seguridad");
         VistaConsola.opcion(0, "crear usuario");
         VistaConsola.opcion(1, "modificar usuario");
@@ -42,13 +43,12 @@ public class Seguridad {
         VistaConsola.seccion("Crear usuario");
         String nombre = lector.leerTexto("ingresar nombre");
         String apellido = lector.leerTexto("ingresar apellido");
-        String rol = seleccionarRol();
         String usuario = lector.leerTexto("ingresar usuario");
         String contrasena = lector.leerTexto("ingresar contrasena");
 
-        usuarios.add(new Usuario(nombre, apellido, rol, usuario, contrasena));
+        usuarios.add(new Administrador(nombre, apellido, usuario, contrasena));
         VistaConsola.exito("Usuario creado exitosamente");
-        VistaConsola.info("Usuario: " + nombre + " | Rol: " + rol);
+        VistaConsola.info("Usuario: " + nombre + " | Rol: " + Administrador.ROL);
     }
 
     private void modificarUsuario() {
@@ -70,11 +70,10 @@ public class Seguridad {
         Usuario usuarioModificado = usuarios.get(posicion);
         VistaConsola.opcion(0, "nombre");
         VistaConsola.opcion(1, "apellido");
-        VistaConsola.opcion(2, "rol");
-        VistaConsola.opcion(3, "usuario");
-        VistaConsola.opcion(4, "contrasena");
+        VistaConsola.opcion(2, "usuario");
+        VistaConsola.opcion(3, "contrasena");
 
-        int dato = lector.leerEntero("ingresar del 0 al 4 que dato desea modificar");
+        int dato = lector.leerEntero("ingresar del 0 al 3 que dato desea modificar");
 
         switch(dato) {
             case 0:
@@ -84,12 +83,9 @@ public class Seguridad {
                 usuarioModificado.setApellido(lector.leerTexto("ingresar nuevo apellido"));
                 break;
             case 2:
-                usuarioModificado.setRol(seleccionarRol());
-                break;
-            case 3:
                 usuarioModificado.setUsuario(lector.leerTexto("ingresar nuevo usuario"));
                 break;
-            case 4:
+            case 3:
                 usuarioModificado.setContrasena(lector.leerTexto("ingresar nueva contrasena"));
                 break;
             default:
@@ -128,31 +124,13 @@ public class Seguridad {
         }
 
         for(int i = 0; i < usuarios.size(); i++) {
+            if(i > 0) {
+                System.out.println();
+            }
+
             System.out.println("usuario " + (i + 1));
             usuarios.get(i).mostrar();
         }
     }
 
-    private String seleccionarRol() {
-        VistaConsola.opcion(0, "Administrador");
-        VistaConsola.opcion(1, "Gerente");
-        VistaConsola.opcion(2, "Recepcionista");
-        VistaConsola.opcion(3, "Mecanico");
-
-        int opcionRol = lector.leerEntero("seleccionar rol");
-
-        switch(opcionRol) {
-            case 0:
-                return Rol.ADMINISTRADOR;
-            case 1:
-                return Rol.GERENTE;
-            case 2:
-                return Rol.RECEPCIONISTA;
-            case 3:
-                return Rol.MECANICO;
-            default:
-                VistaConsola.info("Rol no valido, se asigna Recepcionista");
-                return Rol.RECEPCIONISTA;
-        }
-    }
 }

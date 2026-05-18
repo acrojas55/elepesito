@@ -1,20 +1,21 @@
 import java.util.List;
 
-public class Consultas {
+public class Consultas extends ModuloBase {
     private final LectorConsola lector;
     private final List<Vehiculo> vehiculos;
 
     public Consultas(LectorConsola lector, List<Vehiculo> vehiculos) {
+        super(3, "consultas");
         this.lector = lector;
         this.vehiculos = vehiculos;
     }
 
-    public void mostrar() {
+    public void mostrar(Usuario usuarioAutenticado) {
         VistaConsola.encabezado("Consultas");
         VistaConsola.opcion(0, "buscar vehiculo por placa");
         VistaConsola.opcion(1, "ver vehiculos en espera");
         VistaConsola.opcion(2, "ver historial de reparaciones de un vehiculo");
-        VistaConsola.opcion(3, "ver mecanicos disponibles");
+        VistaConsola.opcion(3, "ver tecnicos disponibles");
         VistaConsola.opcion(4, "consultar servicios mas solicitados");
         VistaConsola.saltoPagina();
 
@@ -31,7 +32,7 @@ public class Consultas {
                 verHistorial();
                 break;
             case 3:
-                verMecanicosDisponibles();
+                verTecnicosDisponibles();
                 break;
             case 4:
                 verServiciosMasSolicitados();
@@ -51,7 +52,7 @@ public class Consultas {
         }
 
         String placaBuscada = lector.leerTexto("ingresar la placa del vehiculo");
-        Vehiculo vehiculo = buscarPorPlaca(placaBuscada);
+        Vehiculo vehiculo = Vehiculo.buscarPorPlaca(vehiculos, placaBuscada);
 
         if(vehiculo == null) {
             VistaConsola.error("No se encontro un vehiculo con esa placa");
@@ -74,6 +75,10 @@ public class Consultas {
 
         for(int i = 0; i < vehiculos.size(); i++) {
             if(vehiculos.get(i).estaPendiente()) {
+                if(hayVehiculosEnEspera) {
+                    System.out.println();
+                }
+
                 System.out.println("vehiculo " + (i + 1));
                 vehiculos.get(i).mostrar();
                 hayVehiculosEnEspera = true;
@@ -94,7 +99,7 @@ public class Consultas {
         }
 
         String placaBuscada = lector.leerTexto("ingresar la placa del vehiculo");
-        Vehiculo vehiculo = buscarPorPlaca(placaBuscada);
+        Vehiculo vehiculo = Vehiculo.buscarPorPlaca(vehiculos, placaBuscada);
 
         if(vehiculo == null) {
             VistaConsola.error("No se encontro un vehiculo con esa placa");
@@ -106,21 +111,11 @@ public class Consultas {
         vehiculo.mostrarHistorial();
     }
 
-    private Vehiculo buscarPorPlaca(String placaBuscada) {
-        for(Vehiculo vehiculo : vehiculos) {
-            if(vehiculo.getPlaca().equalsIgnoreCase(placaBuscada)) {
-                return vehiculo;
-            }
-        }
-
-        return null;
-    }
-
-    private void verMecanicosDisponibles() {
-        VistaConsola.seccion("Ver mecanicos disponibles");
-        VistaConsola.info("Mecanico 1: Carlos");
-        VistaConsola.info("Mecanico 2: Luis");
-        VistaConsola.info("Mecanico 3: Pedro");
+    private void verTecnicosDisponibles() {
+        VistaConsola.seccion("Ver tecnicos disponibles");
+        VistaConsola.info("Tecnico 1: Carlos");
+        VistaConsola.info("Tecnico 2: Luis");
+        VistaConsola.info("Tecnico 3: Pedro");
     }
 
     private void verServiciosMasSolicitados() {

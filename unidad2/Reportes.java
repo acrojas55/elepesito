@@ -1,21 +1,22 @@
 import java.util.List;
 
-public class Reportes {
+public class Reportes extends ModuloBase {
     private final LectorConsola lector;
     private final List<Vehiculo> vehiculos;
     private static final String ARCHIVO_REPORTE_PREDETERMINADO = "reporte_taller.pdf";
 
     public Reportes(LectorConsola lector, List<Vehiculo> vehiculos) {
+        super(4, "reportes");
         this.lector = lector;
         this.vehiculos = vehiculos;
     }
 
-    public void mostrar() {
+    public void mostrar(Usuario usuarioAutenticado) {
         VistaConsola.encabezado("Reportes");
         VistaConsola.opcion(0, "reporte de ingresos del dia");
         VistaConsola.opcion(1, "reporte de vehiculos atendidos por semana");
         VistaConsola.opcion(2, "lista de vehiculos pendientes");
-        VistaConsola.opcion(3, "reporte de mecanicos mas productivos");
+        VistaConsola.opcion(3, "reporte de tecnicos mas productivos");
         VistaConsola.opcion(4, "exportar a PDF");
         VistaConsola.saltoPagina();
 
@@ -32,7 +33,7 @@ public class Reportes {
                 listarVehiculosPendientes();
                 break;
             case 3:
-                reporteMecanicosProductivos();
+                reporteTecnicosProductivos();
                 break;
             case 4:
                 exportarPdf();
@@ -80,6 +81,10 @@ public class Reportes {
 
         for(int i = 0; i < vehiculos.size(); i++) {
             if(vehiculos.get(i).estaPendiente()) {
+                if(hayPendientes) {
+                    System.out.println();
+                }
+
                 System.out.println("vehiculo " + (i + 1));
                 vehiculos.get(i).mostrar();
                 hayPendientes = true;
@@ -91,7 +96,7 @@ public class Reportes {
         }
     }
 
-    private void reporteMecanicosProductivos() {
+    private void reporteTecnicosProductivos() {
         int atendidos = 0;
 
         for(Vehiculo vehiculo : vehiculos) {
@@ -100,7 +105,7 @@ public class Reportes {
             }
         }
 
-        VistaConsola.seccion("Reporte de mecanicos mas productivos");
+        VistaConsola.seccion("Reporte de tecnicos mas productivos");
         VistaConsola.info("Carlos: " + atendidos + " vehiculos atendidos");
         VistaConsola.info("Luis: 0 vehiculos atendidos");
         VistaConsola.info("Pedro: 0 vehiculos atendidos");

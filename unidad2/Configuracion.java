@@ -1,11 +1,12 @@
-public class Configuracion {
+public class Configuracion extends ModuloBase {
     private final LectorConsola lector;
 
     public Configuracion(LectorConsola lector) {
+        super(1, "configuracion");
         this.lector = lector;
     }
 
-    public void mostrar() {
+    public void mostrar(Usuario usuarioAutenticado) {
         VistaConsola.encabezado("Configuracion");
         VistaConsola.opcion(0, "tipo de servicio");
         VistaConsola.opcion(1, "precio de cada servicio");

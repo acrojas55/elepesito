@@ -33,15 +33,9 @@ public class SistemaTaller {
     }
 
     private void cargarUsuariosPredeterminados() {
-        Usuario administrador = new Usuario("Administrador", "Sistema", Rol.ADMINISTRADOR, "admin", "admin123");
-        Usuario gerente = new Usuario("Gerente", "Sistema", Rol.GERENTE, "gerente", "gerente123");
-        Usuario recepcionista = new Usuario("Recepcionista", "Sistema", Rol.RECEPCIONISTA, "recepcion", "recepcion123");
-        Usuario mecanico = new Usuario("Mecanico", "Sistema", Rol.MECANICO, "mecanico", "mecanico123");
+        Usuario administrador = new Administrador("Administrador", "Sistema", "admin", "admin123");
 
         usuarios.add(administrador);
-        usuarios.add(gerente);
-        usuarios.add(recepcionista);
-        usuarios.add(mecanico);
     }
 
     private void cargarVehiculosPredeterminados() {

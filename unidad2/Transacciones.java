@@ -1,10 +1,11 @@
 import java.util.List;
 
-public class Transacciones {
+public class Transacciones extends ModuloBase {
     private final LectorConsola lector;
     private final List<Vehiculo> vehiculos;
 
     public Transacciones(LectorConsola lector, List<Vehiculo> vehiculos) {
+        super(2, "transacciones");
         this.lector = lector;
         this.vehiculos = vehiculos;
     }
@@ -21,7 +22,7 @@ public class Transacciones {
 
         int opcion = lector.leerEntero("Presionar del 0 al 5 para ingresar a cada opcion");
 
-        if(!tienePermiso(usuarioAutenticado, opcion)) {
+        if(!usuarioAutenticado.puedeRealizarTransaccion(opcion)) {
             VistaConsola.error("No tiene permiso para ingresar a esta opcion con el rol " + usuarioAutenticado.getRol());
             return;
         }
@@ -52,43 +53,16 @@ public class Transacciones {
     }
 
     private void mostrarOpcionSiTienePermiso(int opcion, String nombre, Usuario usuarioAutenticado) {
-        if(tienePermiso(usuarioAutenticado, opcion)) {
+        if(usuarioAutenticado.puedeRealizarTransaccion(opcion)) {
             VistaConsola.opcion(opcion, nombre);
         }
-    }
-
-    private boolean tienePermiso(Usuario usuarioAutenticado, int opcion) {
-        String rol = usuarioAutenticado.getRol();
-
-        if(Rol.ADMINISTRADOR.equalsIgnoreCase(rol) || Rol.GERENTE.equalsIgnoreCase(rol)) {
-            return true;
-        }
-
-        if(Rol.RECEPCIONISTA.equalsIgnoreCase(rol)) {
-            switch(opcion) {
-                case 0:
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        if(Rol.MECANICO.equalsIgnoreCase(rol)) {
-            return opcion == 4 || opcion == 5;
-        }
-
-        return false;
     }
 
     private void registrarVehiculo() {
         VistaConsola.seccion("Registrar vehiculo");
         String placa = lector.leerTexto("ingresar la placa del vehiculo");
 
-        if(buscarPorPlaca(placa) != null) {
+        if(Vehiculo.buscarPorPlaca(vehiculos, placa) != null) {
             VistaConsola.error("Ya existe un vehiculo registrado con esa placa");
             return;
         }
@@ -203,6 +177,10 @@ public class Transacciones {
         }
 
         for(int i = 0; i < vehiculos.size(); i++) {
+            if(i > 0) {
+                System.out.println();
+            }
+
             System.out.println("vehiculo " + (i + 1));
             vehiculos.get(i).mostrar();
         }
@@ -215,23 +193,13 @@ public class Transacciones {
         }
 
         String placa = lector.leerTexto("ingresar la placa del vehiculo");
-        Vehiculo vehiculo = buscarPorPlaca(placa);
+        Vehiculo vehiculo = Vehiculo.buscarPorPlaca(vehiculos, placa);
 
         if(vehiculo == null) {
             VistaConsola.error("No se encontro un vehiculo con esa placa");
         }
 
         return vehiculo;
-    }
-
-    private Vehiculo buscarPorPlaca(String placaBuscada) {
-        for(Vehiculo vehiculo : vehiculos) {
-            if(vehiculo.getPlaca().equalsIgnoreCase(placaBuscada)) {
-                return vehiculo;
-            }
-        }
-
-        return null;
     }
 
     private String obtenerMetodoPago(int opcionPago) {

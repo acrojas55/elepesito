@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Vehiculo {
+public class Vehiculo implements Imprimible {
     private final String placa;
     private final String modelo;
     private final int anio;
@@ -9,7 +9,6 @@ public class Vehiculo {
     private boolean pendiente;
     private double totalPagado;
     private final List<String> historial;
-    private final List<String> observaciones;
 
     public Vehiculo(String placa, String modelo, int anio, double cilindrada) {
         this.placa = placa;
@@ -19,7 +18,16 @@ public class Vehiculo {
         this.pendiente = true;
         this.totalPagado = 0;
         this.historial = new ArrayList<>();
-        this.observaciones = new ArrayList<>();
+    }
+
+    public static Vehiculo buscarPorPlaca(List<Vehiculo> vehiculos, String placaBuscada) {
+        for(Vehiculo vehiculo : vehiculos) {
+            if(vehiculo.getPlaca().equalsIgnoreCase(placaBuscada)) {
+                return vehiculo;
+            }
+        }
+
+        return null;
     }
 
     public String getPlaca() {
@@ -45,7 +53,6 @@ public class Vehiculo {
     }
 
     public void agregarObservacion(String observacion) {
-        observaciones.add(observacion);
         agregarHistorial("Observacion del cliente: " + observacion);
     }
 
